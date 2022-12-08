@@ -1,7 +1,7 @@
 import os
 
 def generate(rawName):
-    # Automated generating Linux bash script for x264 encoding
+    # Automatically generate scripts for x264 and JM Encoder encoding.
     # init
     encoderName = 'x264-r3102-416e3eb'
     rawPath = '/data/CAOYUE/MSU2021/'
