@@ -490,14 +490,14 @@ def generate(bitratek, rawName, rawFrames):
     file.write('Bitrate                 = ' + bitrate + ' # Bitrate(bps)\n')
 
     cfg6 = '''
-    InitialQP               = 0     # Initial Quantization Parameter for the first I frame
+    InitialQP               = 32    # Initial Quantization Parameter for the first I frame
                                     # InitialQp depends on two values: Bits Per Picture,
                                     # and the GOP length
     BasicUnit               = 0     # Number of MBs in the basic unit
                                     # should be a fraction of the total number
                                     # of MBs in a frame ("0" sets a BU equal to a frame)
     ChannelType             = 0     # type of channel( 1=time varying channel; 0=Constant channel)
-    RCUpdateMode            = 0     # Rate Control type. Modes supported :
+    RCUpdateMode            = 2     # Rate Control type. Modes supported :
                                     # 0 = original JM rate control,
                                     # 1 = rate control that is applied to all frames regardless of the slice type,
                                     # 2 = original plus intelligent QP selection for I and B slices (including Hierarchical),
