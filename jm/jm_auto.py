@@ -1,3 +1,5 @@
+import os
+bitrateList = ['700', '1000', '2000', '3000', '4000', '6000', '8000', '10000']  # --bitrate <integer>     Set bitrate (kbit/s)
 rawPath      = '/data/CAOYUE/MSU2021/'
 rawName      = input('Raw video name:   ')
 rawFrames    = input('Raw video frames: ')
@@ -12,6 +14,7 @@ for w in tempSplit:         # rawResolution
         rawResolution = w
 rawWidth  = (rawResolution.split('x'))[0]
 rawHeight = (rawResolution.split('x'))[1]
+# outFrameRate  = input('Output framerate  : ')
 outputPath = '/data/WispChan/jm_benchmark_output/'+rawNameSplit[0]+'/'
 
 for w in tempSplit:         # rawFrameRate
@@ -48,7 +51,7 @@ StartFrame            = 0      # Start frame for encoding. (0-N)
 '''
 file.write(cfg2)
 para1 = 'FramesToBeEncoded     = ' + rawFrames + '     # Number of frames to be coded\n'
-para2 = 'FrameRate             = ' + rawResolution + '  # Frame Rate per second (0.1-100.0)'
+para2 = 'FrameRate             = ' + rawFrameRate + '  # Frame Rate per second (0.1-100.0)'
 file.write(para1 + para2)
 
 cfg3 = '''Enable32Pulldown      = 0      # Enable 'hard' 3:2 pulldown (modifying the inpur data)
@@ -765,3 +768,4 @@ fileName2 = rawNameSplit[0] + '_' + bitratek + '.sh'
 file2 = open(fileName2, mode='w', encoding='utf-8')
 file2.write('./lencod.exe -f ' + fileName + '\n')
 file2.close()
+os.system('chmod 777 ' + fileName2)
