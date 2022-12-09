@@ -109,7 +109,7 @@ def generate(bitratek, rawName, rawFrames):
     ProfileIDC            = 100 # Profile IDC (66=baseline, 77=main, 88=extended; FREXT Profiles: 100=High, 110=High 10, 122=High 4:2:2, 244=High 4:4:4, 44=CAVLC 4:4:4 Intra, 118=Multiview High Profile, 128=Stereo High Profile)
     IntraProfile          = 0   # Activate Intra Profile for FRExt (0: false, 1: true)
                                 # (e.g. ProfileIDC=110, IntraProfile=1  =>  High 10 Intra Profile)
-    LevelIDC              = 40  # Level IDC   (e.g. 20 = level 2.0)
+    LevelIDC              = 42  # Level IDC   (e.g. 20 = level 2.0)
 
     IntraPeriod           = 0   # Period of I-pictures   (0=only first)
     IDRPeriod             = 0   # Period of IDR pictures (0=only first)
@@ -483,7 +483,7 @@ def generate(bitratek, rawName, rawFrames):
     #Rate control
     ########################################################################################
 
-    RateControlEnable       = 0     # 0 Disable, 1 Enable
+    RateControlEnable       = 1     # 0 Disable, 1 Enable
     '''
     file.write(cfg5)
 
