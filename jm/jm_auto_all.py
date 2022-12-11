@@ -117,8 +117,8 @@ def generate(bitratek, rawName, rawFrames):
     IntraDelay            = 0   # Intra (IDR) picture delay (i.e. coding structure of PPIPPP... )
     EnableIDRGOP          = 0   # Support for IDR closed GOPs (0: disabled, 1: enabled)
     EnableOpenGOP         = 0   # Support for open GOPs (0: disabled, 1: enabled)
-    QPISlice              = 10  # Quant. param for I Slices (0-51)
-    QPPSlice              = 10  # Quant. param for P Slices (0-51)
+    QPISlice              = 15  # Quant. param for I Slices (0-51)
+    QPPSlice              = 15  # Quant. param for P Slices (0-51)
     FrameSkip             = 0   # Number of frames to be skipped in input (e.g 2 will code every third frame). 
                                 # Note that this now excludes intermediate (i.e. B) coded pictures
     ChromaQPOffset        = 0   # Chroma QP offset (-51..51)
