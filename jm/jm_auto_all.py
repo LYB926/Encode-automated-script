@@ -1,5 +1,5 @@
 import os
-
+# update: 2022/12/11
 def generate(bitratek, rawName, rawFrames):
     rawPath      = '/data/CAOYUE/MSU2021/'
     # bitratek     = input('Output bitrate  : ')
@@ -36,7 +36,7 @@ def generate(bitratek, rawName, rawFrames):
     file = open(fileName, mode='w', encoding='utf-8')
 
     cfg1 = \
-    '''##########################################################################################
+    '''    ##########################################################################################
     # Files
     ##########################################################################################
     '''
@@ -92,14 +92,13 @@ def generate(bitratek, rawName, rawFrames):
                                 # 7 = SMPTE_260M,
                                 # 8 = ITU_REC709_EXACT
 
-    TraceFile             = "trace_enc.txt"      # Trace file 
-    ReconFile             = "test_rec.yuv"       # Reconstruction YUV file
     '''
     file.write(cfg4)
-
-    file.write('OutputFile            = "' + outputPath + rawNameSplit[0] + '_' + bitratek + '.264' + '"           # Bitstream\n    ')
-    cfg5 = '''StatsFile             = "stats.dat"          # Coding statistics file
-
+    file.write('TraceFile             = "trace_' + bitratek + '.txt"      # Trace file\n')
+    file.write('    ReconFile             = "recon_' + bitratek + '.yuv"       # Reconstruction YUV file\n')
+    file.write('    OutputFile            = "' + outputPath + rawNameSplit[0] + '_' + bitratek + '.264' + '"           # Bitstream\n    ')
+    file.write('StatsFile             = "stats_' + bitratek +'.dat"          # Coding statistics file')
+    cfg5 = '''
     NumberOfViews         = 1                     # Number of views to encode (1=1 view, 2=2 views)
     View1ConfigFile       = "encoder_view1.cfg"   # Config file name for second view
     ##########################################################################################
@@ -118,14 +117,14 @@ def generate(bitratek, rawName, rawFrames):
     IntraDelay            = 0   # Intra (IDR) picture delay (i.e. coding structure of PPIPPP... )
     EnableIDRGOP          = 0   # Support for IDR closed GOPs (0: disabled, 1: enabled)
     EnableOpenGOP         = 0   # Support for open GOPs (0: disabled, 1: enabled)
-    QPISlice              = 28  # Quant. param for I Slices (0-51)
-    QPPSlice              = 28  # Quant. param for P Slices (0-51)
+    QPISlice              = 10  # Quant. param for I Slices (0-51)
+    QPPSlice              = 10  # Quant. param for P Slices (0-51)
     FrameSkip             = 0   # Number of frames to be skipped in input (e.g 2 will code every third frame). 
                                 # Note that this now excludes intermediate (i.e. B) coded pictures
     ChromaQPOffset        = 0   # Chroma QP offset (-51..51)
 
     DisableSubpelME       = 0   # Disable Subpixel Motion Estimation (0=off/default, 1=on)
-    SearchRange           = 32  # Max search range
+    SearchRange           = 8   # Max search range
     MESoftenSSEMetric     = 0   # soften lambda criterion for SSE ME
     MEDistortionFPel      = 0   # Select error metric for Full-Pel ME    (0: SAD, 1: SSE, 2: Hadamard SAD)
     MEDistortionHPel      = 2   # Select error metric for Half-Pel ME    (0: SAD, 1: SSE, 2: Hadamard SAD)
@@ -145,7 +144,7 @@ def generate(bitratek, rawName, rawFrames):
                                 #  2: All Color components - All refinements)
     ChromaMEWeight        = 0   # Weighting for chroma components. This parameter should have a relationship with color format.
 
-    NumberReferenceFrames = 4   # Number of previous frames used for inter motion search (0-16)
+    NumberReferenceFrames = 1   # Number of previous frames used for inter motion search (0-16)
 
     PList0References      = 0   # P slice List 0 reference override (0 disable, N <= NumberReferenceFrames)
     Log2MaxFNumMinus4     = 0   # Sets log2_max_frame_num_minus4 (-1 : based on FramesToBeEncoded/Auto, >=0 : Log2MaxFNumMinus4)
@@ -219,7 +218,7 @@ def generate(bitratek, rawName, rawFrames):
     # B Slices
     ##########################################################################################
 
-    NumberBFrames          = 7  # Number of B coded frames inserted (0=not used)
+    NumberBFrames          = 0  # Number of B coded frames inserted (0=not used)
     PReplaceBSlice         = 0  # Replace B-coded slices with P-coded slices when NumberBFrames>0
     QPBSlice               = 30 # Quant. param for B slices (0-51)
     BRefPicQPOffset        = -1 # Quantization offset for reference B coded pictures (-51..51)
@@ -490,7 +489,7 @@ def generate(bitratek, rawName, rawFrames):
     file.write('Bitrate                 = ' + bitrate + ' # Bitrate(bps)\n')
 
     cfg6 = '''
-    InitialQP               = 32    # Initial Quantization Parameter for the first I frame
+    InitialQP               = 15    # Initial Quantization Parameter for the first I frame
                                     # InitialQp depends on two values: Bits Per Picture,
                                     # and the GOP length
     BasicUnit               = 0     # Number of MBs in the basic unit
@@ -603,7 +602,7 @@ def generate(bitratek, rawName, rawFrames):
     ################################################################
     # Rate Distortion Optimized Quantization
     ################################################################
-    UseRDOQuant              =  0 # Use Rate Distortion Optimized Quantization (0=disable, 1=enable)
+    UseRDOQuant              =  1 # Use Rate Distortion Optimized Quantization (0=disable, 1=enable)
     RDOQ_DC                  =  1 # Enable Rate Distortion Optimized Quantization for DC components (0=disable, 1=enable)
     RDOQ_CR                  =  1 # Enable Rate Distortion Optimized Quantization for Chroma components (0=disable, 1=enable)
     RDOQ_DC_CR               =  1 # Enable Rate Distortion Optimized Quantization for Chroma DC components (0=disable, 1=enable)
