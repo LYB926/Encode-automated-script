@@ -42,7 +42,11 @@ def generate(rawName):
 
     # Write to file
     for bitrate in bitrateList:
-        cmd = './' + encoderName + ' --preset slow --subme 9 --bframes 8 --me umh --keyint infinite --tune ssim --bitrate '\
+        # cmd = './' + encoderName + ' --preset slow --subme 9 --bframes 8 --me umh --keyint infinite --tune ssim --bitrate '\
+        #     + bitrate + ' ' + rawPath + rawName + ' --input-res ' + rawResolution + ' --fps ' \
+        #     + rawFrameRate + ' -o ' + outputPath + \
+        #     rawNameSplit[0] + '_' + bitrate + '.264\n'
+        cmd = './' + encoderName + ' --preset slow --subme 9 --bframes 8 --me umh --keyint infinite --bitrate '\
             + bitrate + ' ' + rawPath + rawName + ' --input-res ' + rawResolution + ' --fps ' \
             + rawFrameRate + ' -o ' + outputPath + \
             rawNameSplit[0] + '_' + bitrate + '.264\n'
