@@ -124,7 +124,7 @@ def generate(bitratek, rawName, rawFrames):
     ChromaQPOffset        = 0   # Chroma QP offset (-51..51)
 
     DisableSubpelME       = 0   # Disable Subpixel Motion Estimation (0=off/default, 1=on)
-    SearchRange           = 8   # Max search range
+    SearchRange           = 32  # Max search range
     MESoftenSSEMetric     = 0   # soften lambda criterion for SSE ME
     MEDistortionFPel      = 0   # Select error metric for Full-Pel ME    (0: SAD, 1: SSE, 2: Hadamard SAD)
     MEDistortionHPel      = 2   # Select error metric for Half-Pel ME    (0: SAD, 1: SSE, 2: Hadamard SAD)
@@ -621,7 +621,7 @@ def generate(bitratek, rawName, rawFrames):
     #Fast Motion Estimation Control Parameters
     ########################################################################################
 
-    SearchMode               = 3    # Motion estimation mode
+    SearchMode               = -1   # Motion estimation mode
                                     # -1 = Full Search
                                     #  0 = Fast Full Search (default)
                                     #  1 = UMHexagon Search
@@ -661,7 +661,7 @@ def generate(bitratek, rawName, rawFrames):
     EPZSSubPelMEBiPred       = 1    # EPZS Subpel ME consideration for BiPred partitions
     EPZSSubPelThresScale     = 1    # EPZS Subpel ME Threshold scaler
     EPZSSubPelGrid           = 1    # Perform EPZS using a subpixel grid
-    HMEEnable                = 1    # Enable Hierarchical Motion Estimation consideration with EPZS (does not work with other ME Engines)
+    HMEEnable                = 0    # Enable Hierarchical Motion Estimation consideration with EPZS (does not work with other ME Engines)
     EPZSUseHMEPredictors     = 1    # Use HME motion vectors during EPZS refinement
     UseDistortionReorder     = 1    # Use Distortion based reordering. If HME is enabled, then HME results are used, otherwise zero motion distortion is computed.
 
