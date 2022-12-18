@@ -1,9 +1,9 @@
 import os
 # update: 2022/12/11
-def generate(bitratek, rawName, rawFrames):
+def generate(qp, rawName, rawFrames):
     rawPath      = '/data/CAOYUE/MSU2021/'
     # bitratek     = input('Output bitrate  : ')
-    bitrate      = str(int(bitratek)*1000)    
+    # bitrate      = str(int(bitratek)*1000)    
     rawNameSplit = rawName.split('.')           #Result: ['apple_tree_1920x1080_30', 'yuv']
     tempSplit    = rawNameSplit[0].split('_')   #Result: ['apple', 'tree', '1920x1080', '30']
     for w in tempSplit:         # rawResolution
@@ -32,7 +32,7 @@ def generate(bitratek, rawName, rawFrames):
         elif w == '50':
             rawFrameRate = w + '.0'
 
-    fileName = rawNameSplit[0] + '_' + bitratek + '.cfg'
+    fileName = rawNameSplit[0] + '_' + qp + '.cfg'
     file = open(fileName, mode='w', encoding='utf-8')
 
     cfg1 = \
@@ -94,10 +94,10 @@ def generate(bitratek, rawName, rawFrames):
 
     '''
     file.write(cfg4)
-    file.write('TraceFile             = "trace_' + bitratek + '.txt"      # Trace file\n')
-    file.write('    ReconFile             = "recon_' + bitratek + '.yuv"       # Reconstruction YUV file\n')
-    file.write('    OutputFile            = "' + outputPath + rawNameSplit[0] + '_' + bitratek + '.264' + '"           # Bitstream\n    ')
-    file.write('StatsFile             = "stats_' + bitratek +'.dat"          # Coding statistics file')
+    file.write('TraceFile             = "trace_' + qp + '.txt"      # Trace file\n')
+    file.write('    ReconFile             = "recon_' + qp + '.yuv"       # Reconstruction YUV file\n')
+    file.write('    OutputFile            = "' + outputPath + rawNameSplit[0] + '_' + qp + '.264' + '"           # Bitstream\n    ')
+    file.write('StatsFile             = "stats_' + qp +'.dat"          # Coding statistics file')
     cfg5 = '''
     NumberOfViews         = 1                     # Number of views to encode (1=1 view, 2=2 views)
     View1ConfigFile       = "encoder_view1.cfg"   # Config file name for second view
@@ -105,7 +105,7 @@ def generate(bitratek, rawName, rawFrames):
     # Encoder Control
     ##########################################################################################
     Grayscale             = 0   # Encode in grayscale (Currently only works for 8 bit YUV 420 input)
-    ProfileIDC            = 100 # Profile IDC (66=baseline, 77=main, 88=extended; FREXT Profiles: 100=High, 110=High 10, 122=High 4:2:2, 244=High 4:4:4, 44=CAVLC 4:4:4 Intra, 118=Multiview High Profile, 128=Stereo High Profile)
+    ProfileIDC            = 77  # Profile IDC (66=baseline, 77=main, 88=extended; FREXT Profiles: 100=High, 110=High 10, 122=High 4:2:2, 244=High 4:4:4, 44=CAVLC 4:4:4 Intra, 118=Multiview High Profile, 128=Stereo High Profile)
     IntraProfile          = 0   # Activate Intra Profile for FRExt (0: false, 1: true)
                                 # (e.g. ProfileIDC=110, IntraProfile=1  =>  High 10 Intra Profile)
     LevelIDC              = 42  # Level IDC   (e.g. 20 = level 2.0)
@@ -124,7 +124,7 @@ def generate(bitratek, rawName, rawFrames):
     ChromaQPOffset        = 0   # Chroma QP offset (-51..51)
 
     DisableSubpelME       = 0   # Disable Subpixel Motion Estimation (0=off/default, 1=on)
-    SearchRange           = 32  # Max search range
+    SearchRange           = 64  # Max search range
     MESoftenSSEMetric     = 0   # soften lambda criterion for SSE ME
     MEDistortionFPel      = 0   # Select error metric for Full-Pel ME    (0: SAD, 1: SSE, 2: Hadamard SAD)
     MEDistortionHPel      = 2   # Select error metric for Half-Pel ME    (0: SAD, 1: SSE, 2: Hadamard SAD)
@@ -144,7 +144,7 @@ def generate(bitratek, rawName, rawFrames):
                                 #  2: All Color components - All refinements)
     ChromaMEWeight        = 0   # Weighting for chroma components. This parameter should have a relationship with color format.
 
-    NumberReferenceFrames = 1   # Number of previous frames used for inter motion search (0-16)
+    NumberReferenceFrames = 4   # Number of previous frames used for inter motion search (0-16)
 
     PList0References      = 0   # P slice List 0 reference override (0 disable, N <= NumberReferenceFrames)
     Log2MaxFNumMinus4     = 0   # Sets log2_max_frame_num_minus4 (-1 : based on FramesToBeEncoded/Auto, >=0 : Log2MaxFNumMinus4)
@@ -218,7 +218,7 @@ def generate(bitratek, rawName, rawFrames):
     # B Slices
     ##########################################################################################
 
-    NumberBFrames          = 0  # Number of B coded frames inserted (0=not used)
+    NumberBFrames          = 8  # Number of B coded frames inserted (0=not used)
     PReplaceBSlice         = 0  # Replace B-coded slices with P-coded slices when NumberBFrames>0
     QPBSlice               = 30 # Quant. param for B slices (0-51)
     BRefPicQPOffset        = -1 # Quantization offset for reference B coded pictures (-51..51)
@@ -345,9 +345,9 @@ def generate(bitratek, rawName, rawFrames):
     # Deblocking filter parameters
     ##########################################################################################
 
-    DFParametersFlag         = 0      # Configure deblocking filter (0=parameters below ignored, 1=parameters sent)
-                                    # Note that for pictures with multiple slice types, 
-                                    # only the type of the first slice will be considered.
+    DFParametersFlag         = 1      # Configure deblocking filter (0=parameters below ignored, 1=parameters sent)
+                                      # Note that for pictures with multiple slice types, 
+                                      # only the type of the first slice will be considered.
     DFDisableRefISlice       = 0      # Disable deblocking filter in reference I coded pictures (0=Filter, 1=No Filter). 
     DFAlphaRefISlice         = 0      # Reference I coded pictures Alpha offset div. 2, {-6, -5, ... 0, +1, .. +6}
     DFBetaRefISlice          = 0      # Reference I coded pictures Beta offset div. 2, {-6, -5, ... 0, +1, .. +6}
@@ -376,17 +376,17 @@ def generate(bitratek, rawName, rawFrames):
 
     num_slice_groups_minus1 = 0  # Number of Slice Groups Minus 1, 0 == no FMO, 1 == two slice groups, etc.
     slice_group_map_type    = 0  # 0:  Interleave, 1: Dispersed,    2: Foreground with left-over,
-                                # 3:  Box-out,    4: Raster Scan   5: Wipe
-                                # 6:  Explicit, slice_group_id read from SliceGroupConfigFileName
+                                 # 3:  Box-out,    4: Raster Scan   5: Wipe
+                                 # 6:  Explicit, slice_group_id read from SliceGroupConfigFileName
     slice_group_change_direction_flag = 0    # 0: box-out clockwise, raster scan or wipe right,
-                                            # 1: box-out counter clockwise, reverse raster scan or wipe left
+                                             # 1: box-out counter clockwise, reverse raster scan or wipe left
     slice_group_change_rate_minus1    = 85   #
     SliceGroupConfigFileName          = "sg0conf.cfg"   # Used for slice_group_map_type 0, 2, 6
 
     UseRedundantPicture   = 0    # 0: not used, 1: enabled
     NumRedundantHierarchy = 1    # 0-4
     PrimaryGOPLength      = 10   # GOP length for redundant allocation (1-16)
-                                # NumberReferenceFrames must be no less than PrimaryGOPLength when redundant slice enabled
+                                 # NumberReferenceFrames must be no less than PrimaryGOPLength when redundant slice enabled
     NumRefPrimary         = 1    # Actually used number of references for primary slices (1-16)
 
     ##########################################################################################
@@ -395,25 +395,25 @@ def generate(bitratek, rawName, rawFrames):
 
     RestrictSearchRange    =  2  # restriction for (0: blocks and ref, 1: ref, 2: no restrictions)
     RDOptimization         =  1  # rd-optimized mode decision
-                                # 0: RD-off (Low complexity mode)
-                                # 1: RD-on (High complexity mode)
-                                # 2: RD-on (Fast high complexity mode - not work in FREX Profiles)
-                                # 3: with losses
-                                # 4: RD-on (High complexity mode) with negative skip bias
+                                 # 0: RD-off (Low complexity mode)
+                                 # 1: RD-on (High complexity mode)
+                                 # 2: RD-on (Fast high complexity mode - not work in FREX Profiles)
+                                 # 3: with losses
+                                 # 4: RD-on (High complexity mode) with negative skip bias
     I16RDOpt               =  1  # perform rd-optimized mode decision for Intra 16x16 MB
-                                # 0: SAD-based mode decision for Intra 16x16 MB
-                                # 1: RD-based mode decision for Intra 16x16 MB                        
+                                 # 0: SAD-based mode decision for Intra 16x16 MB
+                                 # 1: RD-based mode decision for Intra 16x16 MB                        
     SubMBCodingState       =  1  # submacroblock coding state
-                                # 0: lowest complexity, do not store or reset coding state during sub-MB mode decision
-                                # 1: medium complexity, reset to master coding state (for current mode) during sub-MB mode decision
-                                # 2: highest complexity, store and reset coding state during sub-MB mode decision
+                                 # 0: lowest complexity, do not store or reset coding state during sub-MB mode decision
+                                 # 1: medium complexity, reset to master coding state (for current mode) during sub-MB mode decision
+                                 # 2: highest complexity, store and reset coding state during sub-MB mode decision
     DistortionSSIM         =  0  # Compute SSIM distortion. (0: disabled/default, 1: enabled)
     DistortionMS_SSIM      =  0  # Compute Multiscale SSIM distortion. (0: disabled/default, 1: enabled)
     SSIMOverlapSize        =  8  # Overlap size to calculate SSIM distortion (1: pixel by pixel, 8: no overlap)
     DistortionYUVtoRGB     =  0  # Calculate distortion in RGB domain after conversion from YCbCr (0:off, 1:on)
     CtxAdptLagrangeMult    =  0  # Context Adaptive Lagrange Multiplier
-                                # 0: disabled (default)
-                                # 1: enabled (works best when RDOptimization=0)
+                                 # 0: disabled (default)
+                                 # 1: enabled (works best when RDOptimization=0)
     FastCrIntraDecision    =  1  # Fast Chroma intra mode decision (0:off, 1:on)
     DisableThresholding    =  1  # Disable Thresholding of Transform Coefficients (0:off, 1:on)
     DisableBSkipRDO        =  0  # Disable B Skip Mode consideration from RDO Mode decision (0:off, 1:on)
@@ -482,14 +482,14 @@ def generate(bitratek, rawName, rawFrames):
     #Rate control
     ########################################################################################
 
-    RateControlEnable       = 1     # 0 Disable, 1 Enable
+    RateControlEnable       = 0       # 0 Disable, 1 Enable
+    Bitrate                 = 6000000 # Bitrate(bps)
     '''
     file.write(cfg5)
 
-    file.write('Bitrate                 = ' + bitrate + ' # Bitrate(bps)\n')
+    file.write('InitialQP               = ' + qp + '    # Initial Quantization Parameter for the first I frame\n')
 
     cfg6 = '''
-    InitialQP               = 15    # Initial Quantization Parameter for the first I frame
                                     # InitialQp depends on two values: Bits Per Picture,
                                     # and the GOP length
     BasicUnit               = 0     # Number of MBs in the basic unit
@@ -770,18 +770,18 @@ def generate(bitratek, rawName, rawFrames):
     # return fileName2
 
 
-bitrateList   = ['700', '1000', '2000', '3000', '4000', '6000', '8000', '10000']  # --bitrate <integer>     Set bitrate (kbit/s)
+QPList   = ['22', '24', '26', '28', '32', '35', '38', '41']  # --bitrate <integer>     Set bitrate (kbit/s)
 rawName       = input('Raw video name:   ')
 rawFrames     = input('Raw video frames: ')
 rawNameSplit  = rawName.split('.')           #Result: ['apple_tree_1920x1080_30', 'yuv']
 shellFileName = rawNameSplit[0] + '.sh'      #Result:  'apple_tree_1920x1080_30.sh'
 shellFile     = open(shellFileName, mode='w', encoding='utf-8')
 shellFile.write('mkdir /data/WispChan/jm_benchmark_output/' + rawNameSplit[0] + '\n')
-for b in bitrateList:
+for b in QPList:
     generate(b, rawName, rawFrames)
-    shellFile.write('./lencod.exe -f ' + rawNameSplit[0] + '_' + b + '.cfg')
-    if b!='10000':
-        shellFile.write(' && ')
+    shellFile.write('./lencod.exe -f ' + rawNameSplit[0] + '_' + b + '.cfg | tee ' + rawNameSplit[0] + '_' + b + '.log &\n')
+    # if b!='41':
+    #     shellFile.write(' && ')
 shellFile.close()
 os.system('chmod 777 ' + shellFileName)
 
