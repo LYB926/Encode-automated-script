@@ -118,9 +118,10 @@ def generate(qp, rawName, rawFrames):
     EnableIDRGOP          = 0   # Support for IDR closed GOPs (0: disabled, 1: enabled)
     EnableOpenGOP         = 0   # Support for open GOPs (0: disabled, 1: enabled)
     '''
-    file.write('QPISlice              = ' + qp + '  # Quant. param for I Slices (0-51)\n')
-    file.write('QPPSlice              = ' + qp + '  # Quant. param for P Slices (0-51)\n')
-    '''
+    file.write(cfg5)
+    file.write('    QPISlice              = ' + qp + '  # Quant. param for I Slices (0-51)\n')
+    file.write('    QPPSlice              = ' + qp + '  # Quant. param for P Slices (0-51)\n')
+    cfg6 = '''
     FrameSkip             = 0   # Number of frames to be skipped in input (e.g 2 will code every third frame). 
                                 # Note that this now excludes intermediate (i.e. B) coded pictures
     ChromaQPOffset        = 0   # Chroma QP offset (-51..51)
@@ -223,8 +224,9 @@ def generate(qp, rawName, rawFrames):
     NumberBFrames          = 8  # Number of B coded frames inserted (0=not used)
     PReplaceBSlice         = 0  # Replace B-coded slices with P-coded slices when NumberBFrames>0
     '''
+    file.write(cfg6)
     file.write('QPBSlice               = ' + qp + ' # Quant. param for B slices (0-51)')
-    '''
+    cfg7 = '''
     BRefPicQPOffset        = -1 # Quantization offset for reference B coded pictures (-51..51)
     DirectModeType         = 1  # Direct Mode Type (0:Temporal 1:Spatial)
     DirectInferenceFlag    = 1  # Direct Inference Flag (0: Disable 1: Enable)
@@ -489,11 +491,11 @@ def generate(qp, rawName, rawFrames):
     RateControlEnable       = 0       # 0 Disable, 1 Enable
     Bitrate                 = 6000000 # Bitrate(bps)
     '''
-    file.write(cfg5)
+    file.write(cfg7)
 
     file.write('InitialQP               = ' + qp + '    # Initial Quantization Parameter for the first I frame\n')
 
-    cfg6 = '''
+    cfg8 = '''
                                     # InitialQp depends on two values: Bits Per Picture,
                                     # and the GOP length
     BasicUnit               = 0     # Number of MBs in the basic unit
@@ -763,7 +765,7 @@ def generate(qp, rawName, rawFrames):
     VUI_max_dec_frame_buffering                     = 16
 
     '''
-    file.write(cfg6)
+    file.write(cfg8)
     file.close()
 
     # fileName2 = rawNameSplit[0] + '.sh'
