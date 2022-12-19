@@ -788,6 +788,8 @@ for b in QPList:
     shellFile.write('./lencod.exe -f ' + rawNameSplit[0] + '_' + b + '.cfg > ' + rawNameSplit[0] + '_' + b + '.log &\n')
     # if b!='41':
     #     shellFile.write(' && ')
+shellFile.write('wait\n')
+shellFile.write('cp *.log /output/')
 shellFile.close()
 os.system('chmod 777 ' + shellFileName)
 
